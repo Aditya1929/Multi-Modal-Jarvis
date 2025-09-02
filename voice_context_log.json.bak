@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": "2025-07-21T18:14:21.724891",
+    "speaker": "Speaker 1",
+    "tone": "positive",
+    "text": "Hey, Jarvis."
+  },
+  {
+    "timestamp": "2025-07-21T18:14:49.846224",
+    "speaker": "Speaker 1",
+    "tone": "positive",
+    "text": "Hello."
+  }
+]{"timestamp": 1753103514.007946, "transcript": "Hey what's up?"}
+{"timestamp": 1753103523.620748, "transcript": "Nothing much."}
+{"timestamp": 1753103530.7575638, "transcript": "Okay, cool."}
+{"timestamp": 1753103667.0783029, "transcript": "Hey, Jarvis."}
+{"timestamp": 1753103731.79151, "transcript": "What did you see today?"}
+{"timestamp": 1753103748.6718872, "transcript": "What else did you see?"}
+{"timestamp": 1753103777.9613519, "transcript": "Hey Jarvis, summarize what you saw."}
+{"timestamp": 1753105262.1770098, "transcript": "Hey Jarvis."}
+{"timestamp": 1753105285.9531798, "transcript": "Summarize."}
+{"timestamp": 1753105315.5675352, "transcript": "HR this, what did you see today?"}
+{"timestamp": 1753105329.0408478, "transcript": "Hey Jarvis, what did you see today?"}
+{"timestamp": 1753122580.7001758, "transcript": "Hello."}
+{"timestamp": 1753122786.568834, "transcript": "Hey Jarvis."}
+{"timestamp": 1753122923.091176, "transcript": "Hello."}
+{"timestamp": 1753122933.308484, "transcript": "Hi, how's it going?"}
+{"timestamp": 1753122941.4260402, "transcript": "Hey Jarvis."}
+{"timestamp": 1753122979.102305, "transcript": "What do you see?"}
+{"timestamp": 1753123335.223986, "transcript": "Hey Jarvis."}
+{"timestamp": 1753123360.876558, "transcript": "Hey Jarvis, what did you see?"}

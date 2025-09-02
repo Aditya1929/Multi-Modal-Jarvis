@@ -1,0 +1,174 @@
+"""
+YOLO Object Detection App
+
+This app uses the ultralytics YOLOv8 model to detect objects from the camera feed,
+draws bounding boxes and labels on a black screen, and displays the result as the main app.
+Hand tracking is used for the home button, following the structure of other Holomat apps.
+
+Also stores detected objects for Jarvis to read later.
+"""
+import pygame
+import sys
+import cv2
+import numpy as np
+from ultralytics import YOLO
+from camera_manager import CameraManager
+from dotenv import load_dotenv
+import os
+import json
+from datetime import datetime
+import time
+
+load_dotenv()
+
+# Initialize Pygame
+pygame.init()
+
+SCREEN_WIDTH = int(os.getenv('SCREEN_WIDTH'))
+SCREEN_HEIGHT = int(os.getenv('SCREEN_HEIGHT'))
+SCREEN_SIZE = (SCREEN_WIDTH, SCREEN_HEIGHT)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+NAVY_BLUE = (20, 20, 40)
+LIGHT_BLUE = (173, 216, 230)
+
+# Load YOLOv8 model (using pretrained COCO weights)
+model = YOLO('yolov8s.pt')
+
+FONT = pygame.font.Font(None, 36)
+
+# File to store detected objects
+DETECTION_LOG_FILE = 'jarvis_vision_log.json'
+
+# Detection cooldown to prevent multiple logging of same objects
+DETECTION_COOLDOWN = 2.0  # seconds
+last_detection_time = {}
+last_logged_objects = set()
+
+def load_detection_log():
+    """Load the detection log from file"""
+    if os.path.exists(DETECTION_LOG_FILE):
+        try:
+            with open(DETECTION_LOG_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            return []
+    return []
+
+def save_detection_log(log_data):
+    """Save the detection log to file"""
+    with open(DETECTION_LOG_FILE, 'w') as f:
+        json.dump(log_data, f, indent=2)
+
+def log_detections(results, log_data):
+    """Log detected objects with timestamp and cooldown"""
+    global last_detection_time, last_logged_objects
+    
+    current_time = time.time()
+    today = datetime.now().strftime('%Y-%m-%d')
+    
+    # Get unique objects detected in this frame
+    detected_objects = set()
+    for box in results.boxes:
+        cls = int(box.cls[0])
+        label = model.names[cls] if hasattr(model, 'names') else str(cls)
+        conf = float(box.conf[0])
+        if conf > 0.5:  # Only log objects with confidence > 50%
+            detected_objects.add(label)
+    
+    # Check cooldown for each object
+    new_objects_to_log = set()
+    for obj in detected_objects:
+        if obj not in last_detection_time or (current_time - last_detection_time[obj]) > DETECTION_COOLDOWN:
+            new_objects_to_log.add(obj)
+            last_detection_time[obj] = current_time
+    
+    # Add to log if new objects were detected
+    if new_objects_to_log:
+        log_entry = {
+            'timestamp': datetime.now().isoformat(),
+            'date': today,
+            'objects': list(new_objects_to_log)
+        }
+        log_data.append(log_entry)
+        save_detection_log(log_data)
+        last_logged_objects.update(new_objects_to_log)
+
+def draw_detections_pygame(surface, results):
+    for box in results.boxes:
+        x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
+        expand_px = 25
+        x1_exp = max(0, x1 - expand_px)
+        y1_exp = max(0, y1 - expand_px)
+        x2_exp = min(SCREEN_WIDTH, x2 + expand_px)
+        y2_exp = min(SCREEN_HEIGHT, y2 + expand_px)
+
+        conf = float(box.conf[0])
+        cls = int(box.cls[0])
+        label = model.names[cls] if hasattr(model, 'names') else str(cls)
+
+        # Draw rectangle
+        pygame.draw.rect(surface, LIGHT_BLUE, (x1_exp + 50, y1_exp + 30, x2_exp - x1_exp, y2_exp - y1_exp), 3)
+
+        # Draw label background
+        label_surface = FONT.render(f'{label} {conf:.2f}', True, WHITE)
+        label_bg_rect = label_surface.get_rect(midtop=(x1 + (x2 - x1) // 2, y2 + 5))
+        pygame.draw.rect(surface, NAVY_BLUE, label_bg_rect)
+        surface.blit(label_surface, label_bg_rect)
+
+def run(screen, camera_manager):
+    running = True
+    home_button_center = (100, SCREEN_SIZE[1] - 100)
+    home_button_radius = 50
+    
+    # Load existing detection log
+    detection_log = load_detection_log()
+
+    while running:
+        if not camera_manager.update():
+            continue
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                pygame.quit()
+                camera_manager.release()
+                sys.exit()
+
+        # Get frame from camera
+        ret, frame = camera_manager.cap.read()
+        if not ret:
+            pygame.display.flip()
+            continue
+
+        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame_transformed = cv2.warpPerspective(frame_rgb, camera_manager.M, (SCREEN_SIZE[0], SCREEN_SIZE[1]))
+        results = model(frame_transformed, verbose=False)[0]
+        
+        # Log detections for Jarvis
+        log_detections(results, detection_log)
+
+        screen.fill(BLACK)
+        detection_surface = pygame.Surface(SCREEN_SIZE)
+        detection_surface.fill(BLACK)
+        draw_detections_pygame(detection_surface, results)
+        screen.blit(detection_surface, (0, 0))
+        
+        # Draw home button
+        pygame.draw.circle(screen, NAVY_BLUE, home_button_center, home_button_radius)
+        pygame.draw.circle(screen, LIGHT_BLUE, home_button_center, home_button_radius, 5)
+        text_surface = FONT.render('Home', True, WHITE)
+        text_rect = text_surface.get_rect(center=home_button_center)
+        screen.blit(text_surface, text_rect)
+        
+        # Hand tracking for home button
+        transformed_landmarks = camera_manager.get_transformed_landmarks()
+        if transformed_landmarks:
+            for hand_landmarks in transformed_landmarks:
+                index_pos = (int(hand_landmarks[8][0]), int(hand_landmarks[8][1]))
+                pygame.draw.circle(screen, LIGHT_BLUE, index_pos, 10, 3)
+                if (index_pos[0] - home_button_center[0]) ** 2 + (index_pos[1] - home_button_center[1]) ** 2 <= home_button_radius ** 2:
+                    running = False
+
+        pygame.display.flip()
+        pygame.time.delay(1) 

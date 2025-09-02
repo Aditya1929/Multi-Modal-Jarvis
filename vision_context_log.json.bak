@@ -1,0 +1,27 @@
+[
+{"timestamp": 1753103472.3687072, "caption": "a man in a white shirt is looking at the camera", "objects": ["person"]},
+{"timestamp": 1753103483.7585049, "caption": "a man in a white shirt is looking at the camera", "objects": ["person"]},
+{"timestamp": 1753103514.146226, "caption": "a man in a white shirt is holding his hand to his face", "objects": ["person"]},
+{"timestamp": 1753103523.7471611, "caption": "a man in a white t - shirt talking on a cell", "objects": ["person"]},
+{"timestamp": 1753103530.873488, "caption": "a man in a white shirt brushing his teeth", "objects": ["person"]},
+{"timestamp": 1753103542.906707, "caption": "a man in a white shirt standing in front of a mirror", "objects": ["person"]},
+{"timestamp": 1753103562.958674, "caption": "a man in a white shirt standing in front of a ceiling fan", "objects": ["person", "skis", "snowboard"]}
+]
+{"timestamp": 1753105225.561125, "caption": "a man in a white shirt standing in front of a mirror", "objects": ["person"]}
+{"timestamp": 1753105235.686789, "caption": "a man in a white shirt standing in front of a mirror", "objects": ["person"]}
+{"timestamp": 1753105273.206996, "caption": "a bedroom with a bed and a ceiling fan", "objects": ["person", "bed"]}
+{"timestamp": 1753105302.89652, "caption": "a man standing in a bedroom next to a bed", "objects": ["person", "bed"]}
+{"timestamp": 1753105307.425588, "caption": "a man standing in a bedroom next to a bed", "objects": ["person", "bed", "sports ball"]}
+{"timestamp": 1753105315.621611, "caption": "a man standing in front of a bed in a bedroom", "objects": ["person", "bed", "sports ball"]}
+{"timestamp": 1753122537.339228, "caption": "a man in a white shirt is looking at the camera", "objects": ["person"]}
+{"timestamp": 1753122549.6633549, "caption": "a man in a white shirt is looking at the camera", "objects": ["person"]}
+{"timestamp": 1753122767.763381, "caption": "a man in a white shirt brushing his teeth", "objects": ["person"]}
+{"timestamp": 1753122777.7870138, "caption": "a man in a white shirt is brushing his teeth", "objects": ["person"]}
+{"timestamp": 1753122903.511575, "caption": "a woman sitting on a bed in a room", "objects": ["bed", "person", "chair"]}
+{"timestamp": 1753122913.204406, "caption": "a woman sitting on a bed in a room", "objects": ["bed", "person", "chair"]}
+{"timestamp": 1753122923.1670778, "caption": "a woman sitting on a bed in a room", "objects": ["bed", "person", "chair"]}
+{"timestamp": 1753122933.3951411, "caption": "a person sitting on a bed in a room", "objects": ["bed", "person"]}
+{"timestamp": 1753122952.88757, "caption": "a man in a white t - shirt talking on a cell", "objects": ["person"]}
+{"timestamp": 1753123301.5641851, "caption": "a man in a white shirt standing in front of a mirror", "objects": ["person"]}
+{"timestamp": 1753123311.534027, "caption": "a man in a white shirt standing in front of a mirror", "objects": ["person"]}
+{"timestamp": 1753123354.0416472, "caption": "a man in a white shirt is brushing his teeth", "objects": ["person"]}
