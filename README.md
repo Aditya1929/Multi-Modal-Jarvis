@@ -1,8 +1,8 @@
 # Calibration
-Holomat tutorial part 2. Video for this project is on my patreon. 
+Holomat tutorial is on the patreon page of concept-bytes. 
 
 ## Description
-These python scripts allow you to do the calibration required for the holomat project. They do camera calibration using a charuco board and 4 point calibration using openCV contours.
+These python scripts allow you to do the calibration required for the holomat project. They do camera calibration using a charuco board and 4 point calibration using openCV contours. In addition, there is a multi-modal AI that scans your environment, listens to you and provides suggestions through Jarvis. Full credit for the holomat goes to concept-bytes. This was made as an extention for educational purposes only. 
 
 ## Installation
 Ensure Python and the necessary libraries are installed:
